@@ -24,7 +24,7 @@ El projecte ja compila i té tota l'estructura feta. Hi falten trossos de codi m
 ## Forats que has de completar
 
 | TODO | Classe | Què has de fer | Exemple de classe |
-|---|---|---|---|
+|------|--------|----------------|-------------------|
 | PR1-01 | `model/Joc` | Validar títol, hores i nota | Sessió 1 |
 | PR1-02 | `fs/Magatzem` | Crear les carpetes import, export i backup | Sessió 2 · Ex3 |
 | PR1-03 | `fs/Magatzem` | Còpia de seguretat amb marca de temps | Sessió 2 · Ex4 |
