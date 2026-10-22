@@ -33,7 +33,7 @@ class ProvesPropiesTest {
 
     @Test
     @DisplayName("PR1-14 · suma hores a dos registres seguits")
-    void sumaHoresEnDosRegistresSegu its() throws Exception {
+    void sumaHoresEnDosRegistresSeguits() throws Exception {
         Path fitxer = tmp.resolve("index");
 
         try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {
