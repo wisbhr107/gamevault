@@ -43,41 +43,62 @@ public class Magatzem {
         return base.resolve("backup");
     }
 
-    /*
-     * TODO PR1-02 · Crear l'estructura (CA 1.1)
-     * Crea les tres carpetes: importacio(), exportacio() i copies().
-     * Si ja existeixen, el mètode NO pot fallar: es pot cridar tantes vegades com calgui.
-     * Pista: sessió 2, Ex3CreaCarpetes. Quin dels dos mètodes de Files no peta si la carpeta ja hi és?
+    /**
+     * Crea les carpetes import, export i backup del magatzem.
+     * Si ja existeixen no falla.
+     *
+     * @throws IOException si no es pot crear alguna carpeta
      */
     public void preparaEstructura() throws IOException {
-        // Escriu aquí el teu codi (PR1-02)
-        throw new UnsupportedOperationException("PR1-02: encara no està fet");
+        Files.createDirectories(importacio());
+        Files.createDirectories(exportacio());
+        Files.createDirectories(copies());
     }
 
-    /*
-     * TODO PR1-03 · Còpia de seguretat amb marca de temps (CA 1.1)
-     * Copia el fitxer dins de copies() amb el nom  <nom>_<marca>.<extensió>
-     *   exemple: catalog.csv  ->  backup/catalog_20261013-151002.csv
-     * - La marca te la dona marcaDeTemps().
-     * - Separa el nom de l'extensió amb lastIndexOf('.').
-     * - Si el destí ja existeix, l'ha de substituir.
-     * - L'original NO es pot moure ni esborrar.
-     * Retorna la ruta de la còpia.
+    /**
+     * Fa una còpia del fitxer a la carpeta backup amb el nom nom_marca.extensió.
+     * L'original no es toca. Si la còpia ja existeix, la substitueix.
+     *
+     * @param fitxer fitxer que es vol copiar
+     * @return la ruta de la còpia
+     * @throws IOException si no es pot fer la còpia
      */
     public Path copiaSeguretat(Path fitxer) throws IOException {
-        // Escriu aquí el teu codi (PR1-03)
-        throw new UnsupportedOperationException("PR1-03: encara no està fet");
+        String nom = fitxer.getFileName().toString();
+        int punt = nom.lastIndexOf('.');
+
+        String nomNou;
+        if (punt == -1) {
+            nomNou = nom + "_" + marcaDeTemps();
+        } else {
+            String sense = nom.substring(0, punt);
+            String extensio = nom.substring(punt);
+            nomNou = sense + "_" + marcaDeTemps() + extensio;
+        }
+
+        Files.createDirectories(copies());
+        Path desti = copies().resolve(nomNou);
+        Files.copy(fitxer, desti, StandardCopyOption.REPLACE_EXISTING);
+        return desti;
     }
 
-    /*
-     * TODO PR1-04 · Mida total del magatzem (CA 1.1)
-     * Retorna la suma de les mides (en bytes) de TOTS els fitxers regulars que hi ha dins de la
-     * carpeta base, també els de les subcarpetes. Les carpetes no compten.
-     * Pista: sessió 2, Ex5Recorre. Files.walk obre recursos del sistema: va dins d'un try-with-resources.
+    /**
+     * Suma la mida en bytes de tots els fitxers del magatzem, també els de les subcarpetes.
+     * Les carpetes no compten.
+     *
+     * @return la mida total en bytes
+     * @throws IOException si no es pot recórrer la carpeta
      */
     public long midaTotal() throws IOException {
-        // Escriu aquí el teu codi (PR1-04)
-        throw new UnsupportedOperationException("PR1-04: encara no està fet");
+        long total = 0;
+        try (Stream<Path> camins = Files.walk(base)) {
+            for (Path p : camins.toList()) {
+                if (Files.isRegularFile(p)) {
+                    total += Files.size(p);
+                }
+            }
+        }
+        return total;
     }
 
     /**
