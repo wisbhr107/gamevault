@@ -1,37 +1,63 @@
 package cat.pratfp.gamevault;
 
+import cat.pratfp.gamevault.io.IndexHores;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * Les teves proves (PR1-14). Aquesta classe SÍ que l'has de modificar.
- * Escriu dues proves noves que no estiguin a les altres classes de prova.
- * Canvia el @DisplayName perquè digui què comproves i treu el fail().
- * Idees: l'índex amb un títol de més de 40 caràcters; una còpia de seguretat d'un fitxer sense extensió;
- * un CSV amb una línia en blanc; carregar un .json que no existeix amb el Convertidor;
- * sumaHores en dos registres seguits...
- */
 class ProvesPropiesTest {
 
     @TempDir
     Path tmp;
 
     @Test
-    @DisplayName("PR1-14 · la meva primera prova")
-    void primeraProva() throws Exception {
-        // Escriu aquí el teu codi (PR1-14)
-        fail("PR1-14: escriu la teva primera prova");
+    @DisplayName("PR1-14 · llegeix les hores del segon registre")
+    void llegeixHoresDelSegonRegistre() throws Exception {
+        Path fitxer = tmp.resolve("index");
+
+        try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {
+            escriuRegistre(raf, 1, "Joc u", 2.5);
+            escriuRegistre(raf, 2, "Joc dos", 7.25);
+        }
+
+        IndexHores index = new IndexHores(fitxer);
+
+        assertEquals(7.25, index.llegeixHores(1));
     }
 
     @Test
-    @DisplayName("PR1-14 · la meva segona prova")
-    void segonaProva() throws Exception {
-        // Escriu aquí el teu codi (PR1-14)
-        fail("PR1-14: escriu la teva segona prova");
+    @DisplayName("PR1-14 · suma hores a dos registres seguits")
+    void sumaHoresEnDosRegistresSegu its() throws Exception {
+        Path fitxer = tmp.resolve("index");
+
+        try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {
+            escriuRegistre(raf, 1, "Joc u", 2.5);
+            escriuRegistre(raf, 2, "Joc dos", 7.25);
+        }
+
+        long midaInicial = Files.size(fitxer);
+        IndexHores index = new IndexHores(fitxer);
+
+        assertEquals(4.0, index.sumaHores(0, 1.5));
+        assertEquals(10.25, index.sumaHores(1, 3.0));
+        assertEquals(4.0, index.llegeixHores(0));
+        assertEquals(10.25, index.llegeixHores(1));
+        assertEquals(midaInicial, Files.size(fitxer));
+        assertEquals(2, index.nombreRegistres());
+    }
+
+    private void escriuRegistre(RandomAccessFile raf, int id, String titol, double hores) throws Exception {
+        raf.writeInt(id);
+
+        String titolFix = String.format("%-" + IndexHores.LONG_TITOL + "s", titol)
+                .substring(0, IndexHores.LONG_TITOL);
+        raf.writeChars(titolFix);
+        raf.writeDouble(hores);
     }
 }
