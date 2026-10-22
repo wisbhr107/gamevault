@@ -1,6 +1,6 @@
 # GameVault v1 · PR1 · MP0486 Accés a dades
 
-Prova pràctica del RA1. Nom i cognoms: **_________________________**
+Prova pràctica del RA1. Nom i cognoms: **Wassim Bouhjar**
 
 El projecte ja compila i té tota l'estructura feta. Hi falten trossos de codi marcats amb
 `TODO PR1-01` … `TODO PR1-13`. Cada TODO explica què has de fer i et diu de quin exemple de classe surt.
@@ -9,7 +9,7 @@ El projecte ja compila i té tota l'estructura feta. Hi falten trossos de codi m
 
 1. Obre la carpeta `gamevault-pr1` amb **IntelliJ IDEA** (projecte Maven, Java 21).
 2. Busca tots els forats: menú **View → Tool Windows → TODO**, o `Ctrl+Maj+F` i cerca `PR1-`.
-3. Executa les proves: clic dret a `src/test/java` → **Run 'All Tests'** (o `mvn test`).
+3. Executa les proves: clic dret a `src/test/java` → **Run 'All Tests'** (o `mvn test`).  
    Al principi gairebé totes surten en vermell. Cada prova porta el codi del TODO al nom
    (per exemple, `PR1-06 · quatre incidències…`): així saps quin forat t'ha fallat.
 4. Quan tot estigui en verd, executa `GameVaultApp` (▶ al costat del `main`) i compara la sortida
@@ -49,17 +49,29 @@ Respon amb les teves paraules (mínim 4 línies cadascuna).
 `hores.dat`? Què faries si haguessis de sumar hores a un joc dins de `catalog.csv`? Quan et compensa
 cada forma d'accés?
 
-> Resposta:
+> El archivo binario `hores.dat` guarda registros de tamaño fijo: 92 bytes cada uno.  
+> Con `seek` podemos ir directamente al registro que queremos.  
+> Las horas ocupan los últimos 8 bytes, por eso `sumaHores` solo cambia esos bytes.  
+> En un CSV, las líneas pueden tener tamaños diferentes. Para encontrar un juego, normalmente hay que leer las líneas hasta encontrarlo.  
+> El acceso secuencial sirve para leer todo el catálogo; el acceso aleatorio sirve para cambiar un registro concreto.
 
 **2. Triar format.** GameVault ha d'enviar el catàleg a una botiga web i també vol una cau per arrencar
 més de pressa. Quin format faries servir per a cada cas (CSV, JSON o serialització Java) i per què?
 
-> Resposta:
+> Para enviar el catálogo a una tienda web, elegiría JSON.  
+> JSON se puede leer y muchas aplicaciones pueden usarlo.  
+> CSV también se puede leer y abrir con una hoja de cálculo, pero tiene menos estructura que JSON.  
+> Para guardar una copia que use solo GameVault, elegiría la serialización Java, porque puede cargar los datos rápidamente.  
+> Esta copia depende del código de Java; CSV y JSON son más fáciles de compartir con otros programas.
 
 **3. Excepcions.** Explica què passa en el teu programa quan el CSV té una línia amb la data mal escrita.
 Per què el programa no s'atura? On es guarda el motiu?
 
-> Resposta:
+> Si una línea tiene una fecha mal escrita, Java produce un error llamado `DateTimeParseException`.  
+> El programa captura ese error y guarda una incidencia con el número de línea y el mensaje `data mal formada`.  
+> La línea con el error se descarta y no se convierte en un juego.  
+> El programa no se detiene porque trata el error y continúa leyendo las líneas siguientes.  
+> El motivo queda guardado en la lista de incidencias.
 
 ## Ús d'eines d'IA
 

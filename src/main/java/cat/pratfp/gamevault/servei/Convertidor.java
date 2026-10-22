@@ -22,9 +22,9 @@ public class Convertidor {
      * Carrega els jocs d'un fitxer triant el DAO per l'extensió (.csv o .json).
      * D'un CSV només es retornen els jocs vàlids.
      *
-     * @param origen 
-     * @return 
-     * @throws CatalegException 
+     * @param origen fitxer d'entrada
+     * @return els jocs llegits
+     * @throws CatalegException si el format no és suportat o el fitxer no es pot llegir
      */
     public List<Joc> carrega(Path origen) throws CatalegException {
         try {
@@ -41,9 +41,9 @@ public class Convertidor {
     /**
      * Desa els jocs en un fitxer triant el DAO per l'extensió (.csv o .json).
      *
-     * @param desti
-     * @param jocs  
-     * @throws CatalegException 
+     * @param desti fitxer de sortida
+     * @param jocs  jocs que s'han de desar
+     * @throws CatalegException si el format no és suportat o no es pot escriure el fitxer
      */
     public void desa(Path desti, List<Joc> jocs) throws CatalegException {
         try {
@@ -60,10 +60,10 @@ public class Convertidor {
     /**
      * Converteix un fitxer d'un format a un altre.
      *
-     * @param origen
-     * @param desti 
-     * @return 
-     * @throws CatalegException 
+     * @param origen fitxer d'entrada (.csv o .json)
+     * @param desti  fitxer de sortida (.csv o .json)
+     * @return el nombre de jocs convertits
+     * @throws CatalegException si algun dels dos formats no és suportat o hi ha un error d'E/S
      */
     public int converteix(Path origen, Path desti) throws CatalegException {
         List<Joc> jocs = carrega(origen);

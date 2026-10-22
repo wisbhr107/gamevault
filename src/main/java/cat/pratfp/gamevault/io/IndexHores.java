@@ -26,7 +26,9 @@ public class IndexHores {
     private final Path fitxer;
 
     /**
-     * @param fitxer fitxer binari de l'índex
+     * Crea un índex d'hores associat al fitxer indicat.
+     *
+     * @param fitxer ruta del fitxer binari de l'índex
      */
     public IndexHores(Path fitxer) {
         this.fitxer = fitxer;
@@ -35,9 +37,9 @@ public class IndexHores {
     /**
      * Escriu el registre d'un joc a la posició indicada.
      *
-     * @param posicio número de registre (0, 1, 2…)
-     * @param j       joc del qual es desen l'id, el títol i les hores
-     * @throws IOException si no es pot escriure
+     * @param posicio número de registre
+     * @param j joc del qual es desen l'identificador, el títol i les hores
+     * @throws IOException si no es pot escriure al fitxer
      */
     public void escriu(int posicio, Joc j) throws IOException {
         try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {
@@ -50,21 +52,21 @@ public class IndexHores {
     }
 
     /**
-     * @return quants registres té el fitxer (0 si no existeix)
-     * @throws IOException si no es pot consultar la mida
+     * Compta els registres complets que conté el fitxer.
+     *
+     * @return nombre de registres, o zero si el fitxer no existeix
+     * @throws IOException si no es pot consultar la mida del fitxer
      */
     public long nombreRegistres() throws IOException {
         return Files.exists(fitxer) ? Files.size(fitxer) / MIDA_REGISTRE : 0;
     }
 
-    /*
-     * TODO PR1-12 · Llegir només les hores d'un registre (CA 1.2 i 1.3)
-     * Obre el fitxer amb RandomAccessFile en mode lectura, fes seek directament al camp de les
-     * hores del registre i llegeix el double.
-     * Pensa-hi: quants bytes hi ha, dins del registre, ABANS del camp de les hores?
-     * Si la posició és més enllà del final, readDouble llançarà una EOFException (és una IOException):
-     * deixa-la sortir.
-     * Pista: sessió 5, Ex5AccesAleatori.
+    /**
+     * Llegeix les hores del registre indicat.
+     *
+     * @param posicio número del registre que es vol llegir
+     * @return hores jugades del registre
+     * @throws IOException si no es pot llegir el fitxer o el registre no és complet
      */
     public double llegeixHores(int posicio) throws IOException {
         try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "r")) {
@@ -75,15 +77,13 @@ public class IndexHores {
         }
     }
 
-    /*
-     * TODO PR1-13 · Sumar hores sense reescriure el fitxer (CA 1.2)
-     * Suma "extra" hores al registre de la posició indicada:
-     *   1. obre el fitxer en mode "rw",
-     *   2. seek al camp de les hores i llegeix el valor actual,
-     *   3. torna a fer seek AL MATEIX LLOC (llegir ha avançat el punter 8 bytes),
-     *   4. escriu el valor nou.
-     * Cap altre byte del fitxer pot canviar i la mida del fitxer ha de quedar igual.
-     * Retorna les hores noves.
+    /**
+     * Suma hores al registre indicat i actualitza només el camp de les hores.
+     *
+     * @param posicio número del registre que es vol actualitzar
+     * @param extra hores que cal sumar
+     * @return total d'hores després de la suma
+     * @throws IOException si no es pot llegir o escriure el registre
      */
     public double sumaHores(int posicio, double extra) throws IOException {
         try (RandomAccessFile raf = new RandomAccessFile(fitxer.toFile(), "rw")) {

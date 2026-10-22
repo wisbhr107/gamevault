@@ -35,9 +35,9 @@ public class JsonJocDao {
     /**
      * Escriu la llista de jocs al fitxer en JSON indentat.
      *
-     * @param p    
-     * @param jocs 
-     * @throws IOException 
+     * @param p    fitxer JSON de destí
+     * @param jocs jocs que s'han d'escriure
+     * @throws IOException si no es pot escriure al fitxer
      */
     public void escriu(Path p, List<Joc> jocs) throws IOException {
         mapper.writerWithDefaultPrettyPrinter().writeValue(p.toFile(), jocs);
@@ -46,9 +46,9 @@ public class JsonJocDao {
     /**
      * Llegeix el fitxer JSON i retorna la llista de jocs.
      *
-     * @param p 
-     * @return 
-     * @throws IOException 
+     * @param p fitxer JSON d'origen
+     * @return la llista de jocs llegida
+     * @throws IOException si el fitxer no existeix o el JSON no és vàlid
      */
     public List<Joc> llegeix(Path p) throws IOException {
         return mapper.readValue(p.toFile(), new TypeReference<List<Joc>>() {});

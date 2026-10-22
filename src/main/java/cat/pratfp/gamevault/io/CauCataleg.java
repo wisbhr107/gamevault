@@ -16,20 +16,18 @@ import java.util.List;
  */
 public class CauCataleg {
 
-    /*
-     * TODO PR1-11 · Serialitzar i desserialitzar el catàleg (CA 1.3 i 1.4)
-     * desa:    escriu amb un ObjectOutputStream UN sol objecte: new ArrayList<>(jocs).
-     *          (List.of(...) també és serialitzable, però així sempre desem el mateix tipus.)
-     * carrega: llegeix l'objecte amb un ObjectInputStream i retorna'l com a List<Joc>.
-     *          readObject pot llançar ClassNotFoundException: embolica-la en una IOException
-     *          amb un missatge clar i la causa original.
-     * Tots dos amb try-with-resources.
-     * 2a part: perquè funcioni, el record Joc ha de ser serialitzable (fitxer Joc.java).
-     * Pista: sessió 6, Ex1Serialitza.
+    /**
+     * Desa la llista de jocs al fitxer amb serialització Java.
+     * Es desa sempre un ArrayList perquè el tipus sigui el mateix.
+     *
+     * @param p    fitxer .ser de destí
+     * @param jocs jocs que s'han de desar
+     * @throws IOException si no es pot escriure al fitxer
      */
     public void desa(Path p, List<Joc> jocs) throws IOException {
-        // Escriu aquí el teu codi (PR1-11)
-        throw new UnsupportedOperationException("PR1-11: encara no està fet");
+        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(p))) {
+            out.writeObject(new ArrayList<>(jocs));
+        }
     }
 
     /**
@@ -41,7 +39,10 @@ public class CauCataleg {
      */
     @SuppressWarnings("unchecked")
     public List<Joc> carrega(Path p) throws IOException {
-        // Escriu aquí el teu codi (PR1-11)
-        throw new UnsupportedOperationException("PR1-11: encara no està fet");
+        try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(p))) {
+            return (List<Joc>) in.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException("No s'ha trobat la classe a " + p.getFileName(), e);
+        }
     }
 }

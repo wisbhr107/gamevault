@@ -21,7 +21,9 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Lectura i escriptura del catàleg en CSV amb OpenCSV (separador ; i UTF-8).
+ */
 public class CsvJocDao {
 
     /** Capçalera del fitxer CSV, en aquest ordre. */
@@ -31,10 +33,12 @@ public class CsvJocDao {
     private static final char SEPARADOR = ';';
 
     /**
-
-     * @param p 
-     * @return 
-     * @throws IOException 
+     * Llegeix un CSV de jocs sense aturar-se per les línies dolentes.
+     * Cada línia incorrecta es descarta i s'afegeix una incidència amb el número de línia i el motiu.
+     *
+     * @param p fitxer CSV amb capçalera
+     * @return els jocs vàlids i una incidència per cada línia descartada
+     * @throws IOException si el fitxer no es pot llegir o no és un CSV
      */
     public ResultatCarrega llegeix(Path p) throws IOException {
         List<Joc> jocs = new ArrayList<>();
@@ -79,9 +83,12 @@ public class CsvJocDao {
     }
 
     /**
-     * @param p  
-     * @param jocs 
-     * @throws IOException 
+     * Escriu el catàleg en un fitxer CSV: primer la capçalera i després una fila per joc.
+     * Si el fitxer ja existeix, se sobreescriu. Només posa cometes quan cal (per exemple, un títol amb «;»).
+     *
+     * @param p    fitxer CSV de destí
+     * @param jocs jocs que s'han d'escriure
+     * @throws IOException si no es pot escriure al fitxer
      */
     public void escriu(Path p, List<Joc> jocs) throws IOException {
         try (Writer w = Files.newBufferedWriter(p, StandardCharsets.UTF_8);
@@ -97,8 +104,10 @@ public class CsvJocDao {
     }
 
     /**
-     * @param j
-     * @return 
+     * Converteix un Joc en la fila de text que espera el CSV.
+     *
+     * @param j joc
+     * @return els 7 camps en l'ordre de la capçalera
      */
     static String[] aCamps(Joc j) {
         return new String[]{String.valueOf(j.id()), j.titol(), j.plataforma(), j.estudi(),
