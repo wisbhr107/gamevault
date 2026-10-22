@@ -38,8 +38,8 @@ El projecte ja compila i té tota l'estructura feta. Hi falten trossos de codi m
 | PR1-11 | `io/CauCataleg` i `model/Joc` | Serialitzar i desserialitzar | Sessió 6 · Ex1 |
 | PR1-12 | `io/IndexHores` | Llegir les hores amb `seek` | Sessió 5 · Ex5 |
 | PR1-13 | `io/IndexHores` | Sumar hores sense reescriure el fitxer | Sessió 5 · Ex5 |
-| PR1-14 | `ProvesPropiesTest` | Escriure dues proves teves | — |
-| PR1-15 | Aquest README | Respondre les tres preguntes de sota | — |
+| PR1-14 | `ProvesPropiesTest` | Escriure dues proves teves |
+| PR1-15 | Aquest README | Respondre les tres preguntes de sota |
 
 ## PR1-15 · Les meves respostes
 
@@ -77,4 +77,8 @@ Per què el programa no s'atura? On es guarda el motiu?
 
 Indica si has fet servir alguna eina d'IA, per a què i en quins TODO. Si no n'has fet servir, escriu-ho.
 
-> Declaració:
+> Declaració:  
+> Sí, he usado herramientas de IA.
+>
+> - **Claude (Anthropic):** lo he usado como guía durante la práctica. Me ha ayudado a entender qué pedía cada TODO y me ha propuesto soluciones, que he comparado con mi propio código. Donde más problemas he tenido y más ayuda he necesitado ha sido en **PR1-12 y PR1-13 (`IndexHores`)** y en **PR1-14 (`ProvesPropiesTest`)**.
+> - **Antigravity:** lo he usado para traducir textos, para mejorar la apariencia del código y del README, y para comprobar que el proyecto compila bien.
